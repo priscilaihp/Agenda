@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class AplicacionTerminal {
     public void demo()
     {
         // Ponemos la letra L para que acepte el número grande.
-        Contacto c1 = new Contacto("Priscila", "UASLP", 9423456789L);
+        /*Contacto c1 = new Contacto("Priscila", "UASLP", 9423456789L);
         Contacto c2 = new Contacto("Pris", "SLP", 9423456781L);
         Contacto c3 = new Contacto("Priska", "MX", 9423456729L);
 
@@ -44,7 +45,7 @@ public class AplicacionTerminal {
         this.agenda.agregaContacto(c1);
         this.agenda.agregaContacto(c2);
         this.agenda.agregaContacto(c3);
-        this.agenda.imprimeTodo();
+        this.agenda.imprimeTodo();*/
     }
 
     public void entradaUsuario()
@@ -54,11 +55,17 @@ public class AplicacionTerminal {
         do
         {
             try {
-                System.out.println("Opciones: agregar - guardar - imprimir - terminar");
+                System.out.println("Opciones: agregar - cargar - eliminar - guardar - imprimir - cuenta - terminar");
                 opcion = entrada.nextLine();
                 switch (opcion) {
                     case "agregar":
                         agregar(entrada);
+                        break;
+                    case "cargar":
+                        cargar(entrada);
+                        break;
+                    case "eliminar":
+                        eliminar(entrada);
                         break;
                     // Se quiere guardar en un archivo.
                     case "guardar":
@@ -69,6 +76,9 @@ public class AplicacionTerminal {
                         break;
                     case "imprimir":
                         agenda.imprimeTodo();
+                        break;
+                    case "cuenta":
+                        contar();
                         break;
                 }
             }
@@ -90,7 +100,31 @@ public class AplicacionTerminal {
                 System.out.println(e.getMessage());
                 opcion = "";
             }
+            catch (ExcepcionContacto ex)
+            {
+                System.out.println(ex.getMessage());
+                opcion = "";
+            }
         }while (opcion != "terminar");
+    }
+
+    private void contar()
+    {
+        System.out.println("Actualmente tienes " + agenda.numContactos());
+    }
+
+    private void eliminar(Scanner entrada)
+    {
+        System.out.print("Telefono del contacto a eliminar: ");
+        long telEliminar = entrada.nextLong();
+        agenda.eliminarContacto(telEliminar);
+    }
+
+    private void cargar(Scanner entrada) throws FileNotFoundException
+    {
+        System.out.print("Nombre del archivo: ");
+        String nomArch = entrada.nextLine();
+        agenda.cargar(nomArch);
     }
 
     private void guardar(Scanner entrada) throws IOException
